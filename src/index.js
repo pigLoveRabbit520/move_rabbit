@@ -61,14 +61,14 @@ export default class GameDemo {
 
   initSence() {
     const scene = this.scene = new Scene()
-    scene.background = new Color(0x1E90FF)
+    scene.background = new Color(0x00FFFF)
   }
 
   initCamera() {
     // 透视摄像机
     const camera = this.camera = new PerspectiveCamera(70, this.options.width/this.options.height, 1, 10000)
-    camera.position.set(0, 100, 100)
-    camera.lookAt(new Vector3(0, 0, 0))
+    camera.position.set(-10, 70, 200)
+    camera.lookAt(new Vector3(0, 0, 0));
     this.scene.add(camera)
   }
 
@@ -76,25 +76,32 @@ export default class GameDemo {
     // 平行光
     const light = this.light = new DirectionalLight()
     light.position.set(0, 20, 20)
+    light.castShadow = true;
     // 要把光添加到相机中(重点)
-    this.camera.add(light)
+    this.camera.add(light);
   }
 
   addMesh() {
-    const meshMaterial = new THREE.MeshPhongMaterial({color: 0x0000ff})
-    const sphereGeometry = new THREE.SphereGeometry(40, 32, 32); // 球体
+    const texture = THREE.ImageUtils.loadTexture("assets/tuji.jpg");//加载纹理贴图
+    const meshMaterial = new THREE.MeshPhongMaterial({
+      color: 0x0000ff,
+      map: texture,
+      side:THREE.DoubleSide,//两面可见
+    })
+    const sphereGeometry = new THREE.SphereGeometry(80, 32, 32); // 球体
     const sphere = new THREE.Mesh(sphereGeometry, meshMaterial);
     this.scene.add(sphere);
 
-
     //创建第二个方块
-    const geometry2 = new THREE.BoxGeometry(100, 100, 100); //创建一个立方体几何对象Geometry
+    const geometry2 = new THREE.BoxGeometry(100, 20, 60); //创建一个立方体几何对象Geometry
     const material2 = new THREE.MeshLambertMaterial({
-        color: 0x0000ff
+        color: 0x0000ff,
     }); //材质对象Material
     const meshDesk = new THREE.Mesh(geometry2, material2); //网格模型对象Mesh
-    meshDesk.translateY(200);//方块二沿y轴正方向平移40
+    // meshDesk.translateY(200);//方块二沿y轴正方向平移40
     this.scene.add(meshDesk); //网格模型添加到场景中
+
+    meshDesk.position.set(100, 0, 0);
   }
 
   initControl() {
@@ -114,7 +121,6 @@ export default class GameDemo {
 
   animate() {
     window.requestAnimationFrame(this.animate)
-    this.controls.update()
     this.render()
   }
 
