@@ -81,25 +81,20 @@ export default class GameDemo {
   }
 
   addMesh() {
-    const meshMaterial = new THREE.MeshPhongMaterial({color: 0x7777ff})
-    // radius — 球体半径，默认为1。
-    // widthSegments — 水平分段数（沿着经线分段），最小值为3，默认值为8
-    // heightSegments — 垂直分段数（沿着纬线分段），最小值为2，默认值为6
-    const sphereGeometry = new THREE.SphereGeometry(40, 32, 32)
-    const sphere = new THREE.Mesh(sphereGeometry, meshMaterial)
-    this.scene.add(sphere)
-  }
+    const meshMaterial = new THREE.MeshPhongMaterial({color: 0x0000ff})
+    const sphereGeometry = new THREE.SphereGeometry(40, 32, 32); // 球体
+    const sphere = new THREE.Mesh(sphereGeometry, meshMaterial);
+    this.scene.add(sphere);
 
-  initSeat() {
-    const loader = new THREE.OBJLoader()
-    loader.load('assets/chair.obj', obj => {
-      obj.traverse(child=> {
-        if (child instanceof Mesh) {
-          child.material.side = THREE.DoubleSide
-          this.scene.add(obj)
-        }
-      })
-    })
+
+    //创建第二个方块
+    const geometry2 = new THREE.BoxGeometry(100, 100, 100); //创建一个立方体几何对象Geometry
+    const material2 = new THREE.MeshLambertMaterial({
+        color: 0x0000ff
+    }); //材质对象Material
+    const meshDesk = new THREE.Mesh(geometry2, material2); //网格模型对象Mesh
+    meshDesk.translateY(200);//方块二沿y轴正方向平移40
+    this.scene.add(meshDesk); //网格模型添加到场景中
   }
 
   initControl() {
