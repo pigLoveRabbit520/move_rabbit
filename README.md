@@ -1,2 +1,2 @@
-# move_rabbit
-基于threejs
+# 说明
+移动兔子的游戏。
