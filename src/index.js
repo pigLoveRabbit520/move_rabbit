@@ -93,7 +93,7 @@ export default class GameDemo {
     })
     const sphereGeometry = this.sphereGeometry = new THREE.SphereGeometry(40, 32, 32); // 球体
     const sphere = this.tuJisphere = new THREE.Mesh(sphereGeometry, meshMaterial);
-    sphere.position.set(-80, 50, 0);
+    sphere.position.set(-80, 55, 0);
 
     // 创建桌子
     const geometry2 = new THREE.BoxGeometry(300, 30, 100); // 创建一个立方体几何对象Geometry
