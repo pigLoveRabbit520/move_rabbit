@@ -1,8 +1,7 @@
 import GameDemo from '../src/index'
 
 
-let element = document.getElementById('myThree')
-console.log(`begin for threejs`)
+let element = document.getElementById('myThree');
 new GameDemo({
   element,
   width: element.clientWidth,
