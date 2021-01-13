@@ -1,7 +1,8 @@
 import * as THREE from 'three'
+import { Project, Scene3D, PhysicsLoader, AmmoPhysics } from 'enable3d';
 
 import initOrbitControls from 'three-orbit-controls';
-const OrbitControls = initOrbitControls(THREE)
+const OrbitControls = initOrbitControls(THREE);
 
 const {
   WebGLRenderer,
@@ -85,6 +86,9 @@ export default class GameDemo {
   }
 
   addMesh() {
+    const physics = new AmmoPhysics(this.scene);
+    physics.debug.enable(true)
+
     const texture = new THREE.TextureLoader().load("assets/tuji.jpg"); // 加载纹理贴图
     const meshMaterial = new THREE.MeshPhongMaterial({
       color: 0x39b54a,
@@ -93,6 +97,7 @@ export default class GameDemo {
     const sphereGeometry = this.sphereGeometry = new THREE.SphereGeometry(20, 32, 32); // 球体
     const sphere = this.tuJisphere = new THREE.Mesh(sphereGeometry, meshMaterial);
     sphere.position.set(-80, 55, 0);
+
 
     // 创建桌子
     const geometry2 = new THREE.BoxGeometry(192, 30, 108); // 创建一个立方体几何对象Geometry
@@ -108,11 +113,13 @@ export default class GameDemo {
     const meshDesk = new THREE.Mesh(geometry2, material2); // 网格模型对象Mesh
 
     meshDesk.position.set(-100, 0, 0);
+    physics.add.existing(meshDesk);
 
     const group = this.group = new THREE.Group();
     group.add(sphere);
     group.add(meshDesk);
     this.scene.add(group);
+    physics.add.existing(group);
   }
 
   //窗口变动触发的函数

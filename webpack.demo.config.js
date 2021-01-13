@@ -1,6 +1,7 @@
 const webpack = require('webpack')
 const path = require('path')
 
+const isDevMode = process.env.NODE_ENV !== 'production'
 
 const plugins = [
   new webpack.DefinePlugin({
@@ -9,6 +10,7 @@ const plugins = [
 ]
 
 const config = {
+  mode: isDevMode ? 'development' : 'production',
   target: 'web',
   entry: './demo/index.js',
   output: {
