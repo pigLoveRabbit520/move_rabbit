@@ -70,7 +70,7 @@ export default class GameDemo {
   initCamera() {
     // 透视摄像机
     const camera = this.camera = new PerspectiveCamera(70, this.options.width/this.options.height, 1, 10000)
-    camera.position.set(-10, 80, 200)
+    camera.position.set(-20, 120, 150);
     camera.lookAt(new Vector3(0, 0, 0));
     this.scene.add(camera)
   }
@@ -87,19 +87,24 @@ export default class GameDemo {
   addMesh() {
     const texture = new THREE.TextureLoader().load("assets/tuji.jpg"); // 加载纹理贴图
     const meshMaterial = new THREE.MeshPhongMaterial({
-      // color: 0x0000ff,
-      map: texture,
+      color: 0x39b54a,
       side:THREE.DoubleSide,//两面可见
     })
-    const sphereGeometry = this.sphereGeometry = new THREE.SphereGeometry(40, 32, 32); // 球体
+    const sphereGeometry = this.sphereGeometry = new THREE.SphereGeometry(20, 32, 32); // 球体
     const sphere = this.tuJisphere = new THREE.Mesh(sphereGeometry, meshMaterial);
     sphere.position.set(-80, 55, 0);
 
     // 创建桌子
-    const geometry2 = new THREE.BoxGeometry(300, 30, 100); // 创建一个立方体几何对象Geometry
-    const material2 = new THREE.MeshLambertMaterial({
-        color: 0x1cbbb4,
-    }); //材质对象Material
+    const geometry2 = new THREE.BoxGeometry(192, 30, 108); // 创建一个立方体几何对象Geometry
+    const matArray = [];
+    matArray.push(new THREE.MeshBasicMaterial({color: 0xFF7F50}));
+    matArray.push(new THREE.MeshBasicMaterial({color: 0x9B30FF}));
+    matArray.push(new THREE.MeshBasicMaterial({map: texture,}));
+    matArray.push(new THREE.MeshBasicMaterial({color: 0x63B8FF}));
+    matArray.push(new THREE.MeshBasicMaterial({color: 0xc41e3a}));
+    matArray.push(new THREE.MeshBasicMaterial({color: 0xffffff}));
+
+    const material2 = new THREE.MeshFaceMaterial(matArray); //材质对象Material
     const meshDesk = new THREE.Mesh(geometry2, material2); // 网格模型对象Mesh
 
     meshDesk.position.set(-100, 0, 0);
@@ -121,13 +126,14 @@ export default class GameDemo {
   initControl() {
     const controls = this.controls = new OrbitControls(this.camera);
     controls.enableDamping = true; // 启用阻尼（惯性），这将给控制器带来重量感
+    controls.dampingFactor = 0.3;
     controls.enableZoom = true;
     controls.enablePan = false; // 摄像机平移
     controls.enableKeys = false; // 禁止键盘
     controls.zoomSpeed = 5
-    controls.maxPolarAngle = 1.5
-    controls.minDistance = 10
-    controls.maxDistance = 800
+    controls.maxPolarAngle = Math.PI; // 垂直旋转的角度的上限
+    controls.minDistance = 10;
+    controls.maxDistance = 800;
   }
 
 
