@@ -13,6 +13,9 @@ const config = {
   mode: isDevMode ? 'development' : 'production',
   target: 'web',
   entry: './demo/index.js',
+  node: {
+    fs: 'empty'
+  },
   output: {
     path: path.resolve(__dirname, 'demo'),
     filename: 'bundle.js'

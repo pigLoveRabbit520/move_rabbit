@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import * as THREE from 'three';
 import { AmmoPhysics } from '@enable3d/ammo-physics';
 
 import initOrbitControls from 'three-orbit-controls';
@@ -117,7 +117,7 @@ export default class GameDemo {
   }
 
   addMesh() {
-    // const physics = new AmmoPhysics(this.scene);
+    const physics = new AmmoPhysics(this.scene);
     // physics.debug.enable(true)
 
     const texture = new THREE.TextureLoader().load("assets/tuji.jpg"); // 加载纹理贴图
