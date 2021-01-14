@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { Project, Scene3D, PhysicsLoader, AmmoPhysics } from 'enable3d';
+import { AmmoPhysics } from '@enable3d/ammo-physics';
 
 import initOrbitControls from 'three-orbit-controls';
 const OrbitControls = initOrbitControls(THREE);
@@ -47,7 +47,8 @@ export default class GameDemo {
     this.initSence() // 初始化场景
     this.initCamera() // 初始化照相机
     this.initLight() // 初始化光源
-    this.addMesh() // 初始化光源
+    this.addMesh()
+    this.addBoxes()
     // this.initSeat()
     this.initControl()
     // window.onresize = this.onWindowResize.bind(this);
@@ -85,9 +86,39 @@ export default class GameDemo {
     this.camera.add(light);
   }
 
+
+  addBoxes() {
+    const texture = new THREE.TextureLoader().load("assets/tuji.jpg"); // 加载纹理贴图
+    const boxWidth = 96;
+    const geometry = new THREE.BoxGeometry(boxWidth, 25, 56); // 创建一个立方体
+    const matArray = [];
+    matArray.push(new THREE.MeshBasicMaterial({color: 0xFF7F50}));
+    matArray.push(new THREE.MeshBasicMaterial({color: 0x9B30FF}));
+    matArray.push(new THREE.MeshBasicMaterial({map: texture,}));
+    matArray.push(new THREE.MeshBasicMaterial({color: 0x63B8FF}));
+    matArray.push(new THREE.MeshBasicMaterial({color: 0xc41e3a}));
+    matArray.push(new THREE.MeshBasicMaterial({color: 0xffffff}));
+
+    const material = new THREE.MeshFaceMaterial(matArray); // 材质对象Material
+    const meshOne = new THREE.Mesh(geometry, material); // 网格模型对象Mesh
+    const group = this.detkgroup = new THREE.Group();
+    const startX = -300;
+    meshOne.position.set(startX, 0, 0);
+    meshOne.name = `box-1`
+    group.add(meshOne);
+    const boxNum = 20;
+    for (let index = 0; index < boxNum - 1; index++) {
+      const meshNew = meshOne.clone();
+      meshNew.position.x = meshOne.position.x + (index + 1) * boxWidth;
+      meshNew.name = `box-${index + 2}`;
+      group.add(meshNew);
+    }
+    this.scene.add(group);
+  }
+
   addMesh() {
-    const physics = new AmmoPhysics(this.scene);
-    physics.debug.enable(true)
+    // const physics = new AmmoPhysics(this.scene);
+    // physics.debug.enable(true)
 
     const texture = new THREE.TextureLoader().load("assets/tuji.jpg"); // 加载纹理贴图
     const meshMaterial = new THREE.MeshPhongMaterial({
@@ -98,28 +129,8 @@ export default class GameDemo {
     const sphere = this.tuJisphere = new THREE.Mesh(sphereGeometry, meshMaterial);
     sphere.position.set(-80, 55, 0);
 
-
-    // 创建桌子
-    const geometry2 = new THREE.BoxGeometry(192, 30, 108); // 创建一个立方体几何对象Geometry
-    const matArray = [];
-    matArray.push(new THREE.MeshBasicMaterial({color: 0xFF7F50}));
-    matArray.push(new THREE.MeshBasicMaterial({color: 0x9B30FF}));
-    matArray.push(new THREE.MeshBasicMaterial({map: texture,}));
-    matArray.push(new THREE.MeshBasicMaterial({color: 0x63B8FF}));
-    matArray.push(new THREE.MeshBasicMaterial({color: 0xc41e3a}));
-    matArray.push(new THREE.MeshBasicMaterial({color: 0xffffff}));
-
-    const material2 = new THREE.MeshFaceMaterial(matArray); //材质对象Material
-    const meshDesk = new THREE.Mesh(geometry2, material2); // 网格模型对象Mesh
-
-    meshDesk.position.set(-100, 0, 0);
-    physics.add.existing(meshDesk);
-
-    const group = this.group = new THREE.Group();
-    group.add(sphere);
-    group.add(meshDesk);
-    this.scene.add(group);
-    physics.add.existing(group);
+    this.scene.add(sphere);
+    // physics.add.existing(group);
   }
 
   //窗口变动触发的函数
@@ -131,16 +142,16 @@ export default class GameDemo {
   }
 
   initControl() {
-    const controls = this.controls = new OrbitControls(this.camera);
+    const controls = this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     controls.enableDamping = true; // 启用阻尼（惯性），这将给控制器带来重量感
-    controls.dampingFactor = 0.3;
+    controls.dampingFactor = 0.2;
     controls.enableZoom = true;
     controls.enablePan = false; // 摄像机平移
     controls.enableKeys = false; // 禁止键盘
     controls.zoomSpeed = 5
     controls.maxPolarAngle = Math.PI; // 垂直旋转的角度的上限
     controls.minDistance = 10;
-    controls.maxDistance = 800;
+    controls.maxDistance = 900;
   }
 
 

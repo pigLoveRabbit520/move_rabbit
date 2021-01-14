@@ -23,6 +23,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "@enable3d/ammo-physics": "^0.21.0",
     "enable3d": "^0.21.0",
     "stats.js": "^0.17.0",
     "three": "^0.117.0",
