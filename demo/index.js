@@ -1,9 +1,11 @@
 import GameDemo from '../src/index'
+import { PhysicsLoader } from '@enable3d/ammo-physics';
 
-
-let element = document.getElementById('myThree');
-new GameDemo({
-  element,
-  width: element.clientWidth,
-  height: element.clientHeight,
-})
+PhysicsLoader('/ammo', () => {
+  let element = document.getElementById('myThree');
+  new GameDemo({
+    element,
+    width: element.clientWidth,
+    height: element.clientHeight,
+  })
+});

@@ -26,7 +26,7 @@
     "@enable3d/ammo-physics": "^0.21.0",
     "enable3d": "^0.21.0",
     "stats.js": "^0.17.0",
-    "three": "^0.122.0",
+    "three": "^0.124.0",
     "three-obj-loader": "^1.1.3",
     "three-orbit-controls": "^82.1.0"
   }

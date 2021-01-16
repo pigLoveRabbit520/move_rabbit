@@ -1,8 +1,6 @@
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { AmmoPhysics } from '@enable3d/ammo-physics';
-
-import initOrbitControls from 'three-orbit-controls';
-const OrbitControls = initOrbitControls(THREE);
 
 const {
   WebGLRenderer,
@@ -41,17 +39,19 @@ export default class GameDemo {
       pixelRatio: window.devicePixelRatio,
       debugMode: false
     }
-    this.options = Object.assign({}, defaultOptions, options)
+    this.options = Object.assign({}, defaultOptions, options);
     // 场景（scene）、相机（camera）、渲染器（renderer）
     this.initRender() // 初始化渲染器
     this.initSence() // 初始化场景
+    this.initPhysics()
     this.initCamera() // 初始化照相机
     this.initLight() // 初始化光源
-    this.addMesh()
     this.addBoxes()
+    this.addMesh()
     // this.initSeat()
     this.initControl()
     // window.onresize = this.onWindowResize.bind(this);
+    this.initClock();
     this.render();
   }
 
@@ -86,6 +86,10 @@ export default class GameDemo {
     this.camera.add(light);
   }
 
+  initPhysics() {
+    const physics = this.physics = new AmmoPhysics(this.scene);
+    physics.debug.enable(true)
+  }
 
   addBoxes() {
     const texture = new THREE.TextureLoader().load("assets/tuji.jpg"); // 加载纹理贴图
@@ -104,7 +108,7 @@ export default class GameDemo {
     const group = this.detkgroup = new THREE.Group();
     const startX = -300;
     meshOne.position.set(startX, 0, 0);
-    meshOne.name = `box-1`
+    meshOne.name = `box-1`;
     group.add(meshOne);
     const boxNum = 20;
     for (let index = 0; index < boxNum - 1; index++) {
@@ -114,12 +118,11 @@ export default class GameDemo {
       group.add(meshNew);
     }
     this.scene.add(group);
+    this.physics.add.existing(group);
+    group.body.setCollisionFlags(2); // kinematic
   }
 
   addMesh() {
-    const physics = new AmmoPhysics(this.scene);
-    // physics.debug.enable(true)
-
     const texture = new THREE.TextureLoader().load("assets/tuji.jpg"); // 加载纹理贴图
     const meshMaterial = new THREE.MeshPhongMaterial({
       color: 0x39b54a,
@@ -130,7 +133,8 @@ export default class GameDemo {
     sphere.position.set(-80, 55, 0);
 
     this.scene.add(sphere);
-    // physics.add.existing(group);
+    this.physics.add.existing(sphere);
+    sphere.body.setCollisionFlags(0);
   }
 
   //窗口变动触发的函数
@@ -144,7 +148,7 @@ export default class GameDemo {
   initControl() {
     const controls = this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     controls.enableDamping = true; // 启用阻尼（惯性），这将给控制器带来重量感
-    controls.dampingFactor = 0.2;
+    controls.dampingFactor = 0.05;
     controls.enableZoom = true;
     controls.enablePan = false; // 摄像机平移
     controls.enableKeys = false; // 禁止键盘
@@ -154,12 +158,17 @@ export default class GameDemo {
     controls.maxDistance = 900;
   }
 
+  initClock() {
+    this.clock = new THREE.Clock()
+  }
 
   render() {
     // 自转
     this.tuJisphere.rotation.y -= Math.PI * 0.005;
     this.renderer.render(this.scene, this.camera);
     this.controls.update();
+    this.physics.update(this.clock.getDelta() * 1000);
+    this.physics.updateDebugger()
     // 将this的指向用bind方法强制给指向到这个class
     window.requestAnimationFrame(this.render.bind(this))
   }
