@@ -21,11 +21,12 @@ if (!isDevMode) {
 }
 
 const config = {
+  mode: isDevMode ? 'development' : 'production',
   target: 'web',
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, 'lib'),
-    filename: `seating-plan-3d${isDevMode ? '' : '.min'}.js`
+    path: path.resolve(__dirname, 'dist'),
+    filename: `bundle.js`
   },
   plugins: plugins,
   module: {
@@ -39,6 +40,10 @@ const config = {
 
 if (isDevMode) {
   config.devtool = 'source-map'
+  config.devServer = {
+    contentBase: [path.join(__dirname, 'public'), __dirname],
+    host: '0.0.0.0'
+  }
 }
 
 module.exports = config

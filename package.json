@@ -1,15 +1,15 @@
 {
-  "name": "three-js-demo",
+  "name": "move_rabbit",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack serve --config ./webpack.demo.config.js",
+    "dev": "webpack serve --config ./webpack.config.js",
     "build": "NODE_ENV=production webpack && cp -r assets lib"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/shen1992/simple-demo.git"
+    "url": "https://github.com/salamander-mh/move_rabbit.git"
   },
   "author": "",
   "license": "ISC",
