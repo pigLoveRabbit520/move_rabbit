@@ -1,5 +1,7 @@
 const webpack = require('webpack')
 const path = require('path')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const minimizer = []
 
 const isDevMode = process.env.NODE_ENV !== 'production'
 
@@ -10,12 +12,15 @@ const plugins = [
 ]
 
 if (!isDevMode) {
-  plugins.push(new webpack.optimize.UglifyJsPlugin({
-    compress: {
-      warnings: false
-    },
-    output: {
-      comments: false
+  minimizer.push(new UglifyJsPlugin({
+    uglifyOptions: {
+        output: {
+            comments: false
+        },
+        compress: {
+          drop_debugger: true,
+          drop_console: true
+        }
     }
   }))
 }
@@ -29,6 +34,9 @@ const config = {
     filename: `bundle.js`
   },
   plugins: plugins,
+  optimization: {
+    minimizer: minimizer,
+  },
   module: {
     rules: [{
       test: /\.js$/,
