@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { AmmoPhysics } from '@enable3d/ammo-physics';
+import { Keyboard } from '@yandeu/keyboard'
 
 const {
   WebGLRenderer,
@@ -49,9 +50,10 @@ export default class GameDemo {
     this.addBoxes()
     this.addSphere()
     // this.initSeat()
-    this.initControl()
+    this.initControl();
     // window.onresize = this.onWindowResize.bind(this);
     this.initClock();
+    this.initKeyboard();
     this.render();
   }
 
@@ -159,6 +161,22 @@ export default class GameDemo {
 
   initClock() {
     this.clock = new THREE.Clock()
+  }
+
+  initKeyboard() {
+    const keyboard = new Keyboard();
+    // left move
+    keyboard.on.down('KeyA', keyCode => {
+      console.log(`${keyCode} is down.`)
+    });
+     // right move
+    keyboard.on.down('KeyD', keyCode => {
+      console.log(`${keyCode} is down.`)
+    });
+     // forward move
+    keyboard.on.down('KeyW', keyCode => {
+      console.log(`${keyCode} is down.`)
+    });
   }
 
   render() {
