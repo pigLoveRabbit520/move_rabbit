@@ -47,7 +47,7 @@ export default class GameDemo {
     this.initCamera() // 初始化照相机
     this.initLight() // 初始化光源
     this.addBoxes()
-    this.addMesh()
+    this.addSphere()
     // this.initSeat()
     this.initControl()
     // window.onresize = this.onWindowResize.bind(this);
@@ -122,8 +122,7 @@ export default class GameDemo {
     group.body.setCollisionFlags(2); // kinematic
   }
 
-  addMesh() {
-    const texture = new THREE.TextureLoader().load("assets/tuji.jpg"); // 加载纹理贴图
+  addSphere() {
     const meshMaterial = new THREE.MeshPhongMaterial({
       color: 0x39b54a,
       side:THREE.DoubleSide,//两面可见
@@ -134,7 +133,7 @@ export default class GameDemo {
 
     this.scene.add(sphere);
     this.physics.add.existing(sphere);
-    sphere.body.setCollisionFlags(0);
+    sphere.body.setCollisionFlags(0); // Dynamic
   }
 
   //窗口变动触发的函数
@@ -167,6 +166,11 @@ export default class GameDemo {
     this.tuJisphere.rotation.y -= Math.PI * 0.005;
     this.renderer.render(this.scene, this.camera);
     this.controls.update();
+
+     // set the speed variable
+     const speed = 7
+
+    this.tuJisphere.body.setVelocityX(speed)
     this.physics.update(this.clock.getDelta() * 1000);
     this.physics.updateDebugger()
     // 将this的指向用bind方法强制给指向到这个class
