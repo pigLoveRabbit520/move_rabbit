@@ -165,17 +165,19 @@ export default class GameDemo {
 
   initKeyboard() {
     const keyboard = new Keyboard();
+    // set the speed variable
+    const speed = 7
     // left move
     keyboard.on.down('KeyA', keyCode => {
-      console.log(`${keyCode} is down.`)
+      this.tuJisphere.body.setVelocityX(speed);
     });
      // right move
     keyboard.on.down('KeyD', keyCode => {
-      console.log(`${keyCode} is down.`)
+      this.tuJisphere.body.setVelocityY(speed);
     });
      // forward move
     keyboard.on.down('KeyW', keyCode => {
-      console.log(`${keyCode} is down.`)
+      this.tuJisphere.body.setVelocityZ(speed);
     });
   }
 
@@ -184,11 +186,7 @@ export default class GameDemo {
     this.tuJisphere.rotation.y -= Math.PI * 0.005;
     this.renderer.render(this.scene, this.camera);
     this.controls.update();
-
-     // set the speed variable
-     const speed = 7
-
-    this.tuJisphere.body.setVelocityX(speed)
+    
     this.physics.update(this.clock.getDelta() * 1000);
     this.physics.updateDebugger()
     // 将this的指向用bind方法强制给指向到这个class
